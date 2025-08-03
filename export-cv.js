@@ -252,14 +252,15 @@ app.get('/cv-download/:guid', (req, res) => {
 });
 
 // sanity check for directories
-app.get('health', (req, res) => {
+app.get('/health', (req, res) => {
+  console.log('Checking directories...');
   if (!fs.existsSync(RESUME_DIR)) {
     fs.mkdirSync(RESUME_DIR);
   }
   if (!fs.existsSync(META_DIR)) {
     fs.mkdirSync(META_DIR);
   }
-  res.sendStatus(200);
+  res.sendStatus(200, 'OK');
 });
 
 app.listen(PORT, () => {
