@@ -12,6 +12,9 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
+const HOST = process.env.HOST || 'localhost';
+const PORT = process.env.PORT || 3001;
+
 console.log(process.env.STRIPE_SECRET_KEY)
 const _stripe = stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -58,8 +61,6 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), (req, res) =>
 // General middleware (after webhook)
 app.use(bodyParser.json()); // JSON parsing for most endpoints
 app.use(bodyParser.text({ type: 'text/html' })); // For HTML content
-
-const PORT = 3001;
 
 // Create payment intent endpoint
 app.post('/create-payment-intent', async (req, res) => {
@@ -233,7 +234,6 @@ app.post('/send-cv', upload.single('cv'), async (req, res) => {
   }
 });
 
-
 app.get('/cv-download/:guid', (req, res) => {
   const { guid } = req.params;
   const filePath = path.join('./resumes', `${guid}.pdf`);
@@ -252,7 +252,13 @@ app.get('/cv-download/:guid', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`PDF generator server running at http://localhost:${PORT}`);
+  
+  if (process.env.NODE_ENV === 'production') {
+    console.log(`🚀 Server is running in production mode`);
+    console.log(`🌍 Likely accessible via: https://your-domain.com`);
+  } else {
+    console.log(`PDF generator server running at http://${HOST}:${PORT}`);
+  }
 
 
   setInterval(() => {
