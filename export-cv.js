@@ -251,6 +251,17 @@ app.get('/cv-download/:guid', (req, res) => {
   res.download(filePath, 'cv.pdf');
 });
 
+// sanity check for directories
+app.get('health', (req, res) => {
+  if (!fs.existsSync(RESUME_DIR)) {
+    fs.mkdirSync(RESUME_DIR);
+  }
+  if (!fs.existsSync(META_DIR)) {
+    fs.mkdirSync(META_DIR);
+  }
+  res.sendStatus(200);
+});
+
 app.listen(PORT, () => {
   
   if (process.env.NODE_ENV === 'production') {
