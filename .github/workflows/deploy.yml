@@ -3,7 +3,7 @@ name: 🚀 Deploy to Render
 on:
   push:
     branches:
-      - main  # ou master selon ta branche principale
+      - master  # ou master selon ta branche principale
 
 jobs:
   deploy:
